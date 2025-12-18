@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentinel Live Node Explorer</title>
+  <meta name="description"
+    content="Explore live Sentinel dVPN nodes with real-time statistics, health monitoring, and filtering capabilities.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+
+  <!-- TailwindCSS -->
+  <link href="./src/output.css" rel="stylesheet">
+
+  <!-- Tailwind Plus Elements -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white font-sans antialiased">
+  <!-- Animated background elements -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute top-1/2 -left-40 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl animate-pulse"
+      style="animation-delay: 1s;"></div>
+    <div class="absolute -bottom-40 right-1/3 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"
+      style="animation-delay: 2s;"></div>
+  </div>
+
+  <div class="relative z-10">
+    <!-- Header -->
+    <header class="border-b border-white/5 backdrop-blur-xl bg-white/[0.02]">
+      <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div class="flex items-center justify-center shadow-lg pl-2">
+              <svg width="124px" height="48px" viewBox="0 0 201 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_1_320)">
+                  <path
+                    d="M48.9798 2.31547C49.6221 2.31547 50.1412 2.83456 50.1412 3.47689V21.9922V23.1424C50.1562 25.4242 50.1748 28.2736 49.7752 31.2947C49.3122 34.8163 48.3935 37.6806 46.9819 40.052C42.3773 47.7711 34.1055 53.4288 26.3416 54.1831C26.3043 54.1868 26.267 54.1906 26.2296 54.1906C26.1923 54.1906 26.1549 54.1906 26.1176 54.1831C18.3462 53.4213 10.0744 47.7673 5.47733 40.052C4.05824 37.6806 3.14703 34.8126 2.68396 31.2947C2.28811 28.2736 2.30679 25.4279 2.32546 23.1424V21.9922L2.32919 3.47689C2.32919 2.83456 2.84828 2.31547 3.4906 2.31547H48.9798ZM48.9798 0.00012207H3.48687C1.5711 0.00012207 0.0101051 1.56112 0.0101051 3.47689V23.1312C-0.0123015 25.3458 -0.0347082 28.3893 0.383549 31.5935C0.891433 35.4362 1.90347 38.5881 3.48313 41.2358C5.91052 45.3063 9.30139 48.8989 13.2935 51.6325C17.323 54.3885 21.6661 56.0653 25.8599 56.4798C25.9794 56.4947 26.1026 56.5022 26.2259 56.5022C26.3491 56.5022 26.4686 56.4947 26.5919 56.4798C30.7819 56.0653 35.125 54.3922 39.1545 51.6362C43.1466 48.9026 46.5412 45.3063 48.9723 41.2358C50.5558 38.5844 51.5678 35.4325 52.0719 31.5972C52.4902 28.4229 52.4715 25.4951 52.4566 23.1387V21.9848V3.48062C52.4566 1.56112 50.8956 0.00385651 48.9798 0.00385651V0.00012207Z"
+                    fill="#0156FC"></path>
+                  <path
+                    d="M45.8181 25.7578C46.158 26.0154 46.6434 25.7727 46.6434 25.347L46.6322 23.0055V6.31999C46.636 6.03244 46.4044 5.8009 46.1169 5.8009H6.3451C6.05755 5.8009 5.82602 6.03244 5.82602 6.31999V16.5822C5.82602 17.0229 5.92685 17.4561 6.12477 17.8482C6.3227 18.2403 6.60651 18.5839 6.96129 18.8453L36.8779 41.2183C37.1393 41.4125 37.158 41.7897 36.919 42.0138C36.3663 42.5366 35.7837 43.0258 35.1787 43.4889C34.992 43.6308 34.738 43.6308 34.5551 43.4926L6.65133 22.5835C6.31149 22.3295 5.82602 22.5685 5.82602 22.998C5.82602 26.5831 5.50859 33.2714 8.52228 38.3951C11.887 44.12 17.6642 48.6387 23.6094 50.1026C24.4683 50.3117 25.3273 50.4611 26.1862 50.5395C26.2198 50.5432 26.2534 50.5432 26.2833 50.5395C30.1746 50.1885 34.1331 48.4109 37.5314 45.7258C38.3829 45.0499 39.2007 44.3217 39.9775 43.5412C41.5086 41.9988 42.8455 40.2735 43.9472 38.4026C44.9443 36.7109 45.5754 34.8474 45.975 32.9839C46.0646 32.5806 46.1393 32.1735 46.2065 31.7627C46.382 30.6947 45.9488 29.6154 45.0862 28.9694L19.7555 10.0283C19.3596 9.72953 19.565 9.09841 20.0692 9.09841H23.4227C23.5347 9.09841 23.643 9.13576 23.7364 9.20298L45.8219 25.7615L45.8181 25.7578Z"
+                    fill="#0156FC"></path>
+                  <path
+                    d="M66.5979 34.5513C66.5979 37.8114 69.4248 40.6347 74.6381 40.6347C79.8514 40.6347 82.2452 38.2446 82.2452 35.201C82.2452 32.5496 80.5086 30.8542 77.0319 30.2044L71.1651 29.1176C66.2954 28.2064 63.7746 25.6409 63.7746 21.294C63.7746 16.2973 67.7294 12.6002 74.2049 12.6002C81.1584 12.6002 85.5053 16.7305 85.5053 21.9438H82.0286C82.0286 18.6836 79.2016 15.8604 74.2049 15.8604C69.6414 15.8604 67.2514 18.2056 67.2514 21.294C67.2514 23.7289 68.7713 25.4243 72.2481 26.0741L77.0281 26.9442C83.1115 28.0309 85.7219 30.6376 85.7219 35.201C85.7219 40.1977 81.812 43.8948 74.6381 43.8948C67.4642 43.8948 63.1211 39.5479 63.1211 34.5513H66.5979Z"
+                    fill="white"></path>
+                  <path
+                    d="M107.235 37.3785C105.715 41.5498 102.455 43.8988 97.8912 43.8988C92.0244 43.8988 87.4609 39.3353 87.4609 32.5984C87.4609 25.8615 92.0244 21.298 97.8912 21.298C103.758 21.298 107.888 25.6449 107.888 31.7283C107.888 32.5984 107.802 33.2071 107.758 33.5955L107.672 34.1183H90.7211C91.1991 38.2486 94.2427 40.8552 97.8912 40.8552C100.498 40.8552 102.671 39.593 103.758 37.3785H107.235ZM104.628 31.0747C104.412 27.12 101.585 24.3378 97.8912 24.3378C93.9365 24.3378 91.1991 27.12 90.7211 31.0747H104.628Z"
+                    fill="white"></path>
+                  <path
+                    d="M110.492 21.7312H113.315L113.748 24.1212H113.965C114.398 23.5984 114.921 23.1204 115.57 22.732C116.657 22.0374 118.267 21.298 120.481 21.298C125.478 21.298 129.175 24.9913 129.175 30.4249V43.4619H125.915V30.4249C125.915 26.9482 123.308 24.3415 120.048 24.3415C116.571 24.3415 113.744 27.1685 113.744 30.4249V43.4619H110.484V21.7312H110.492Z"
+                    fill="white"></path>
+                  <path
+                    d="M133.742 24.7746H130.266V21.731H133.742V15.6476H137.003V21.731H141.999V24.7746H137.003V39.1185C137.003 39.9887 137.436 40.4219 138.306 40.4219H141.999V43.4654H137.652C135.217 43.4654 133.742 41.9866 133.742 39.7721V24.7783V24.7746Z"
+                    fill="white"></path>
+                  <path d="M145.039 21.7325H148.299V43.4633H145.039V21.7325Z" fill="white"></path>
+                  <path
+                    d="M152.429 21.7312H155.253L155.686 24.1212H155.902C156.336 23.5984 156.858 23.1204 157.508 22.732C158.595 22.0374 160.204 21.298 162.419 21.298C167.416 21.298 171.113 24.9913 171.113 30.4249V43.4619H167.853V30.4249C167.853 26.9482 165.246 24.3415 161.986 24.3415C158.509 24.3415 155.682 27.1685 155.682 30.4249V43.4619H152.422V21.7312H152.429Z"
+                    fill="white"></path>
+                  <path
+                    d="M193.497 37.3785C191.977 41.5498 188.716 43.8988 184.153 43.8988C178.286 43.8988 173.723 39.3353 173.723 32.5984C173.723 25.8615 178.286 21.298 184.153 21.298C190.02 21.298 194.15 25.6449 194.15 31.7283C194.15 32.5984 194.064 33.2071 194.019 33.5955L193.933 34.1183H176.983C177.461 38.2486 180.504 40.8552 184.153 40.8552C186.76 40.8552 188.933 39.593 190.02 37.3785H193.497ZM190.89 31.0747C190.673 27.12 187.846 24.3378 184.153 24.3378C180.198 24.3378 177.461 27.12 176.983 31.0747H190.89Z"
+                    fill="white"></path>
+                  <path d="M196.973 13.0382H200.233V43.459H196.973V13.0382Z" fill="white"></path>
+                </g>
+                <defs>
+                  <clipPath id="clip0_1_320">
+                    <rect width="200.872" height="56.4983" fill="white"></rect>
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
+            <div>
+              <h1
+                class="text-2xl font-bold bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
+                Live Node Explorer
+              </h1>
+            </div>
+          </div>
+          <div class="hidden sm:flex items-center gap-3">
+            <span
+              class="inline-flex items-center gap-3 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
+              <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-medium">Live</span>
+              </span>
+              <span class="w-px h-3 bg-emerald-500/20"></span>
+              <span id="last-updated" class="text-emerald-400/60 font-mono text-xs"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8" id="stats-container">
+        <!-- Totals Card -->
+        <div
+          class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 p-5 backdrop-blur-sm hover:border-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/5">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/10 flex items-center justify-center">
+                <i class="fas fa-chart-line text-purple-400"></i>
+              </div>
+              <h3 class="font-semibold text-white/90">Totals</h3>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-400">Active Nodes</span>
+                <span class="font-mono font-semibold text-white" id="stat-active">—</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-400">Online Users</span>
+                <span class="font-mono font-semibold text-white" id="stat-users">—</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-400">Earning</span>
+                <span class="font-mono font-semibold text-emerald-400" id="stat-earning">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Type Card -->
+        <div
+          class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 p-5 backdrop-blur-sm hover:border-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-fuchsia-500/5">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-fuchsia-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-lg bg-gradient-to-br from-fuchsia-500/20 to-fuchsia-600/10 flex items-center justify-center">
+                <i class="fas fa-network-wired text-fuchsia-400"></i>
+              </div>
+              <h3 class="font-semibold text-white/90">Type</h3>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-fuchsia-400">V2Ray <span class="font-mono" id="stat-v2ray">—</span></span>
+                <span class="text-red-400">WireGuard <span class="font-mono" id="stat-wireguard">—</span></span>
+              </div>
+              <div class="h-2 rounded-full bg-slate-700/50 overflow-hidden flex">
+                <div class="h-full bg-gradient-to-r from-fuchsia-500 to-pink-500 transition-all duration-500"
+                  id="bar-v2ray" style="width: 50%"></div>
+                <div class="h-full bg-gradient-to-r from-red-600 to-red-500 transition-all duration-500"
+                  id="bar-wireguard" style="width: 50%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Health Card -->
+        <div
+          class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 p-5 backdrop-blur-sm hover:border-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 flex items-center justify-center">
+                <i class="fas fa-heart-pulse text-emerald-400"></i>
+              </div>
+              <h3 class="font-semibold text-white/90">Health</h3>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-emerald-400">Healthy <span class="font-mono" id="stat-healthy">—</span></span>
+                <span class="text-red-400">Unhealthy <span class="font-mono" id="stat-unhealthy">—</span></span>
+              </div>
+              <div class="h-2 rounded-full bg-slate-700/50 overflow-hidden">
+                <div
+                  class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
+                  id="bar-health" style="width: 50%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Whitelist Card -->
+        <div
+          class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 p-5 backdrop-blur-sm hover:border-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/5">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 flex items-center justify-center">
+                <i class="fas fa-list-check text-amber-400"></i>
+              </div>
+              <h3 class="font-semibold text-white/90">Whitelist</h3>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-emerald-400">Whitelisted <span class="font-mono" id="stat-whitelisted">—</span></span>
+                <span class="text-amber-400">Pending <span class="font-mono" id="stat-pending">—</span></span>
+                <span class="text-red-400">Delisted <span class="font-mono" id="stat-delisted">—</span></span>
+              </div>
+              <div class="h-2 rounded-full bg-slate-700/50 overflow-hidden flex">
+                <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-500"
+                  id="bar-whitelisted" style="width: 33%"></div>
+                <div class="h-full bg-gradient-to-r from-amber-500 to-amber-400 transition-all duration-500"
+                  id="bar-pending" style="width: 33%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Server Card -->
+        <div
+          class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 p-5 backdrop-blur-sm hover:border-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/5">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 flex items-center justify-center">
+                <i class="fas fa-server text-cyan-400"></i>
+              </div>
+              <h3 class="font-semibold text-white/90">Server</h3>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-cyan-400">Hosting <span class="font-mono" id="stat-hosting">—</span></span>
+                <span class="text-purple-400">Residential <span class="font-mono" id="stat-residential">—</span></span>
+              </div>
+              <div class="h-2 rounded-full bg-slate-700/50 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full transition-all duration-500"
+                  id="bar-server" style="width: 50%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div
+        class="relative z-10 rounded-lg bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 p-5 mb-6 backdrop-blur-sm overflow-visible">
+        <div class="flex flex-wrap items-center gap-6">
+          <span class="text-sm font-medium text-slate-400">
+            <i class="fas fa-filter mr-2"></i>Filters
+          </span>
+
+          <!-- Custom Search Box -->
+          <div class="relative">
+            <input type="text" id="custom-search"
+              class="w-64 bg-slate-900/50 border border-white/10 rounded-full py-2 pl-10 pr-9 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500/50 transition-all font-sans"
+              placeholder="Search nodes...">
+            <i
+              class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm pointer-events-none"></i>
+            <button type="button" id="clear-search"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors hidden"
+              title="Clear search">
+              <i class="fas fa-times text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Earning Filter - Triple Switch -->
+          <div class="flex items-center gap-2">
+            <div class="relative inline-flex items-center bg-slate-700/50 rounded-full p-0.5" id="earning-switch">
+              <!-- Sliding indicator -->
+              <div id="earning-indicator"
+                class="absolute h-[calc(100%-4px)] rounded-full transition-all duration-300 ease-out bg-slate-600"
+                style="width: 32px; left: 50%; transform: translateX(-50%);"></div>
+              <button type="button" data-value="earning" data-index="0"
+                class="earning-option relative z-10 px-3 py-1.5 text-xs font-medium rounded-full transition-colors duration-200 text-slate-400 hover:text-white">
+                Earning
+              </button>
+              <button type="button" data-value="all" data-index="1"
+                class="earning-option relative z-10 px-3 py-1.5 text-xs font-medium rounded-full transition-colors duration-200 text-white">
+                All
+              </button>
+              <button type="button" data-value="not-earning" data-index="2"
+                class="earning-option relative z-10 px-3 py-1.5 text-xs font-medium rounded-full transition-colors duration-200 text-slate-400 hover:text-white">
+                Not Earning
+              </button>
+            </div>
+          </div>
+
+          <label class="filter-toggle group cursor-pointer flex items-center gap-3">
+            <div class="relative">
+              <input type="checkbox" id="filter-healthy" class="sr-only peer">
+              <div
+                class="w-11 h-6 bg-slate-700/50 rounded-full peer peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-emerald-400 transition-all duration-300">
+              </div>
+              <div
+                class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-lg transition-all duration-300 peer-checked:translate-x-5">
+              </div>
+            </div>
+            <span class="text-sm text-slate-300 group-hover:text-white transition-colors">Only Healthy</span>
+          </label>
+
+          <label class="filter-toggle group cursor-pointer flex items-center gap-3">
+            <div class="relative">
+              <input type="checkbox" id="filter-whitelisted" class="sr-only peer">
+              <div
+                class="w-11 h-6 bg-slate-700/50 rounded-full peer peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-emerald-400 transition-all duration-300">
+              </div>
+              <div
+                class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-lg transition-all duration-300 peer-checked:translate-x-5">
+              </div>
+            </div>
+            <span class="text-sm text-slate-300 group-hover:text-white transition-colors">Only Whitelisted</span>
+          </label>
+
+          <label class="filter-toggle group cursor-pointer flex items-center gap-3">
+            <div class="relative">
+              <input type="checkbox" id="filter-residential" class="sr-only peer">
+              <div
+                class="w-11 h-6 bg-slate-700/50 rounded-full peer peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-emerald-400 transition-all duration-300">
+              </div>
+              <div
+                class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-lg transition-all duration-300 peer-checked:translate-x-5">
+              </div>
+            </div>
+            <span class="text-sm text-slate-300 group-hover:text-white transition-colors">Only Residential</span>
+          </label>
+
+          <!-- Page Length Selector -->
+          <div class="flex items-center gap-2 ml-auto">
+            <div class="relative" id="page-length-wrapper">
+              <button type="button" id="page-length-btn"
+                class="flex items-center gap-2 bg-slate-700/50 border border-white/10 rounded-full px-4 py-1.5 text-sm text-white hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-all">
+                <span class="text-slate-400">Show</span>
+                <span id="page-length-value" class="text-purple-400 font-medium">25</span>
+                <i class="fas fa-chevron-down text-xs text-slate-400 ml-1"></i>
+              </button>
+              <div id="page-length-menu"
+                class="hidden absolute top-full left-0 mt-2 w-32 rounded-lg bg-slate-800 border border-white/10 shadow-xl shadow-black/20 overflow-hidden z-[100]">
+                <button type="button" data-value="10"
+                  class="page-length-option w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors">10
+                  rows</button>
+                <button type="button" data-value="25"
+                  class="page-length-option w-full text-left px-4 py-2 text-sm text-purple-400 bg-white/5">25
+                  rows</button>
+                <button type="button" data-value="50"
+                  class="page-length-option w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors">50
+                  rows</button>
+                <button type="button" data-value="100"
+                  class="page-length-option w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors">100
+                  rows</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div
+        class="rounded-lg bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 backdrop-blur-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table id="nodes-table" class="w-full">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left px-5 py-4 text-sm font-semibold text-slate-300">Node Address</th>
+                <th class="text-center px-3 py-4 text-sm font-semibold text-slate-300">Status</th>
+                <th class="text-left px-5 py-4 text-sm font-semibold text-slate-300">Moniker</th>
+                <th class="text-center px-3 py-4 text-sm font-semibold text-slate-300">Peers</th>
+                <th class="text-left px-5 py-4 text-sm font-semibold text-slate-300">Location</th>
+                <th class="text-left px-3 py-4 text-sm font-semibold text-slate-300">Type</th>
+                <th class="text-left px-5 py-4 text-sm font-semibold text-slate-300">Last Checked</th>
+              </tr>
+            </thead>
+            <tbody id="nodes-tbody">
+              <!-- Data loaded via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading-overlay"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="text-center">
+          <div
+            class="w-16 h-16 mx-auto mb-4 rounded-full border-4 border-purple-500/30 border-t-purple-500 animate-spin">
+          </div>
+          <p class="text-slate-400">Loading nodes...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-6 mt-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-slate-500">
+        <p>Unofficial Sentinel dVPN Node Explorer • Made by Benji & Teneke with <i
+            class="fas fa-heart text-red-500"></i></p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
+  <script src="./src/script.js"></script>
+</body>
+
+</html>

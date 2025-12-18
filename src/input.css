@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+/* Custom Font Family */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* DataTables Custom Styling */
+table.dataTable {
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
+
+table.dataTable tbody tr {
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+table.dataTable tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+table.dataTable tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+table.dataTable tbody tr:nth-child(even):hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+table.dataTable tbody td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+table.dataTable thead th {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  font-weight: 600;
+}
+
+/* DataTables wrapper styling */
+.dt-container {
+  padding: 1.5rem;
+}
+
+.dt-search,
+.dt-length,
+.dt-info,
+.dt-paging {
+  padding: 0.75rem 0;
+}
+
+.dt-layout-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dt-length select {
+  background-color: rgb(30 41 59) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 9999px;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+}
+
+.dt-length select:hover {
+  border-color: rgba(139, 92, 246, 0.4) !important;
+  background-color: rgb(51 65 85) !important;
+}
+
+.dt-length select:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.6) !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.dt-length select option {
+  background-color: rgb(30 41 59);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Pagination buttons */
+.dt-paging-button {
+  padding: 0.5rem 0.75rem !important;
+  margin: 0 0.125rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.dt-paging-button:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.dt-paging-button.current {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.dt-paging-button.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Column sorting indicators */
+table.dataTable thead .dt-orderable-asc span.dt-column-order,
+table.dataTable thead .dt-orderable-desc span.dt-column-order {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+table.dataTable thead .dt-ordering-asc span.dt-column-order,
+table.dataTable thead .dt-ordering-desc span.dt-column-order {
+  color: #a78bfa;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Toggle switch peer selector fix */
+.peer:checked~div:first-of-type {
+  background: linear-gradient(to right, #10b981, #34d399);
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stats-card {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.stats-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stats-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stats-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stats-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.stats-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
